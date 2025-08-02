@@ -56,6 +56,7 @@ int main(void)
     GameUtils::GameState state(GameUtils::SETUP);
 
     // Init the GUI
+    // std::cout << "A" << std::endl;
     std::unique_ptr<Gui> pGui = std::make_unique<Gui>(sf::VideoMode(ROW, COL), "Poker Game", "/usr/share/fonts/truetype/lato/Lato-Black.ttf");
 
     // BANNERS
@@ -64,7 +65,7 @@ int main(void)
 
     Banner addCoinBanner("bankroll: " + std::to_string(pMike->getBankroll()), pGui->getFont(), BTN_ONE_COL, OPTION_OUT_ROW, sf::Color::Black);
     pGui->addBanner(addCoinBanner);
-
+ 
     Banner currentBetBanner("Bet: " + std::to_string(0), pGui->getFont(), BTN_TWO_COL, OPTION_OUT_ROW, sf::Color::Black);
     pGui->addBanner(currentBetBanner);
 
@@ -93,15 +94,19 @@ int main(void)
     pGui->addButton(bet1Btn);
     pGui->addButton(bet1Btn);
     pGui->addButton(bet1Btn);
+    // std::cout << "Button_ size: " << pGui->getButtonSize() << std::endl;
 
     Button addCoinBtn(BTN_WIDTH, BTN_HEIGHT, BTN_ONE_COL, OPTION_ROW, sf::Color::Blue, pGui->getFont(), "Add Coin+");
     pGui->addButton(addCoinBtn);
+    // std::cout << "Button_ size: " << pGui->getButtonSize() << std::endl;
 
     Button dealBtn(BTN_WIDTH, BTN_HEIGHT, BTN_TWO_COL, OPTION_ROW, sf::Color::Blue, pGui->getFont(), "DEAL");
     pGui->addButton(dealBtn);
 
     Button hitMeBtn(BTN_WIDTH, BTN_HEIGHT, BTN_THREE_COL, OPTION_ROW, sf::Color::Blue, pGui->getFont(), "HIT ME");
     pGui->addButton(dealBtn);
+    // std::cout << "Button_ size: " << pGui->getButtonSize() << std::endl;
+
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------
     // Card 1
@@ -149,17 +154,19 @@ int main(void)
     //              : Game loop by chatGPT. Fleshed out with my structures. 
     //
     //>---------------------------------------------------------------------------------------------------<
-    while (pGui->getWindow().isOpen())
+    while (window.isOpen())
     {
-        while (pGui->pollEvent()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
 
-            if (pGui->getEvent().type == sf::Event::Closed)
-                pGui->closeWindow();
+            if (event.type == sf::Event::Closed)
+                window.close();
 
-            if (pGui->getEvent().type == sf::Event::MouseButtonPressed) {
+            if (event.type == sf::Event::MouseButtonPressed) {
+
                 if (pGui->getEvent().mouseButton.button == sf::Mouse::Left) {
                     // Check if mouse clicked inside button
-                    auto mousePos = sf::Mouse::getPosition(pGui->getWindow());
+                    auto mousePos = sf::Mouse::getPosition(window);
 
                     switch(state)
                     {
@@ -214,7 +221,7 @@ int main(void)
                             break;
                         
                         case GameUtils::DEAL:
-                            if (pGui->getButtonBound(GameUtils::ButtonLoc::DEAL).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
+                            if (pGui->getButtonBound(GameUtils::ButtonLoc::DEAL_BTN).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
                                 std::cout << "Deal!" << std::endl;
                                 std::vector<Card> hand = pDealer->dealHand();
                                 pMike->setHand(hand);
@@ -287,9 +294,9 @@ int main(void)
                                 pGui->setButtonColor(GameUtils::ButtonLoc::HIT_ME, sf::Color::Blue);
 
                                 pGui->setBannerText(GameUtils::BannerLoc::BANKROLL, "bankroll: " + std::to_string(pMike->getBankroll()));
-                                currentBetDisplay.setString("Bet: " + std::to_string(0));
-
-                                state = GameUtils::SETUP;
+                                pGui->setBannerText(GameUtils::BannerLoc::BET, "Bet: " + std::to_string(0));
+                                
+                                state = GameUtils::GameState::SETUP;
 
                             }
                             break;
@@ -303,55 +310,59 @@ int main(void)
             }
         }
 
-        pGui->clearWindow();
-        pGui->getWindow().draw(title);
-        // Draw discard (Layer TWO)
-        pGui->getWindow().draw(btnOne);
-        pGui->getWindow().draw(btnOneText);
-        pGui->getWindow().draw(btnTwo);
-        pGui->getWindow().draw(btnTwoText);
-        pGui->getWindow().draw(btnThree);
-        pGui->getWindow().draw(btnThreeText);
-        pGui->getWindow().draw(btnFour);
-        pGui->getWindow().draw(btnFourText);
-        pGui->getWindow().draw(btnFive);
-        pGui->getWindow().draw(btnFiveText);
+        // pGui->clearWindow();
+        // pGui->drawScreen();
+        // window.draw(title);
+        // // Draw discard (Layer TWO)
+        window.clear();
+        // window.draw(pGui->getBanner(GameUtils::BannerLoc::TITLE));
+        sf::Text t = pGui->getBanner(GameUtils::BannerLoc::TITLE);
+        window.draw(t);
+        // window.draw(btnOneText);
+        // window.draw(btnTwo);
+        // window.draw(btnTwoText);
+        // window.draw(btnThree);
+        // window.draw(btnThreeText);
+        // window.draw(btnFour);
+        // window.draw(btnFourText);
+        // window.draw(btnFive);
+        // window.draw(btnFiveText);
 
         // Draw cards (Layer ONE)
-        pGui->getWindow().draw(oneSprite);
-        pGui->getWindow().draw(twoSprite);
-        pGui->getWindow().draw(threeSprite);
-        pGui->getWindow().draw(fourSprite);
-        pGui->getWindow().draw(fiveSprite);
+        // window.draw(oneSprite);
+        // window.draw(twoSprite);
+        // window.draw(threeSprite);
+        // window.draw(fourSprite);
+        // window.draw(fiveSprite);
 
-        // Draw options (Layer THREE)
-        pGui->getWindow().draw(addCoinBtn);
-        pGui->getWindow().draw(coinText);
-        pGui->getWindow().draw(currentBetDisplay);
-        pGui->getWindow().draw(dealBtn);
-        pGui->getWindow().draw(delBtnText);
-        pGui->getWindow().draw(dealNewCardsBtn);
-        pGui->getWindow().draw(dealNewCardsText);
+        // // Draw options (Layer THREE)
+        // window.draw(addCoinBtn);
+        // window.draw(coinText);
+        // window.draw(currentBetDisplay);
+        // window.draw(dealBtn);
+        // window.draw(delBtnText);
+        // window.draw(dealNewCardsBtn);
+        // window.draw(dealNewCardsText);
 
-        // Draw Layer FOUR
-        pGui->getWindow().draw(addCoinDisplay);
+        // // Draw Layer FOUR
+        // window.draw(addCoinDisplay);
 
-        // Draw Layer FIVE
-        pGui->getWindow().draw(instructions);
+        // // Draw Layer FIVE
+        // window.draw(instructions);
 
-        // Draw Bet button
-        pGui->getWindow().draw(bet1Btn);
-        pGui->getWindow().draw(bet1Text);
-        pGui->getWindow().draw(bet2Btn);
-        pGui->getWindow().draw(bet2Text);
-        pGui->getWindow().draw(bet3Btn);
-        pGui->getWindow().draw(bet3Text);
-        pGui->getWindow().draw(bet4Btn);
-        pGui->getWindow().draw(bet4Text);
-        pGui->getWindow().draw(bet5Btn);
-        pGui->getWindow().draw(bet5Text);
+        // // Draw Bet button
+        // window.draw(bet1Btn);
+        // window.draw(bet1Text);
+        // window.draw(bet2Btn);
+        // window.draw(bet2Text);
+        // window.draw(bet3Btn);
+        // window.draw(bet3Text);
+        // window.draw(bet4Btn);
+        // window.draw(bet4Text);
+        // window.draw(bet5Btn);
+        // window.draw(bet5Text);
 
-        pGui->getWindow().display();
+        window.display();
     }
 
     // /// TERMINAL BASED GAME

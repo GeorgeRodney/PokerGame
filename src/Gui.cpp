@@ -12,12 +12,15 @@ Gui::Gui(const sf::VideoMode& mode
             , const std::string& gameName
             , const std::string& fontFile)
 : buttons_()
-, banner_()
-, window_(mode, gameName)
+, banners_()
 , font_()
 // , card_()
+, window_(mode, gameName)
 {
-    font_.loadFromFile(fontFile);
+    if(!font_.loadFromFile(fontFile))
+    {
+        throw std::runtime_error("Gui.cpp failed to load font file.");
+    }
 }
 
 bool Gui::pollEvent(void)
@@ -43,11 +46,21 @@ void Gui::drawScreen(void)
         window_.draw(buttons_[j].getRect());
         window_.draw(buttons_[j].getText());
     }
+    // Banners
+    for (int j = 0; j < banners_.size(); ++j)
+    {
+        window_.draw(banners_[j].getHandle());
+    }
+}
+
+void Gui::display(void)
+{
+    window_.display();
 }
 
 void Gui::addBanner(Banner b)
 {
-    banner_.push_back(b);
+    banners_.push_back(b);
 }
 
 void Gui::addButton(Button btn)
@@ -62,5 +75,5 @@ void Gui::setButtonColor(const GameUtils::ButtonLoc btn,  sf::Color c)
 
 void Gui::setBannerText(const GameUtils::BannerLoc ban, const std::string& str)
 {
-    banner_[ban].setText(str);
+    banners_[ban].setText(str);
 }

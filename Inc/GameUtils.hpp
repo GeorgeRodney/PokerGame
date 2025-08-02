@@ -6,7 +6,7 @@ namespace GameUtils
 enum GameState
 {
     SETUP = 0,
-    BET,
+    BET_STATE,
     DEAL,
     DISCARD
 };
@@ -24,9 +24,8 @@ enum ButtonLoc
     BET4,
     BET5,
     ADD_COIN,
-    DEAL,
+    DEAL_BTN,
     HIT_ME
-
 };
 
 enum BannerLoc
