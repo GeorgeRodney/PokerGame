@@ -72,6 +72,9 @@ int main(void)
     Banner instructionsBanner(ADD_COINS_BET_INSTR, pGui->getFont(), COL/2, INSTRUCTION_ROW, sf::Color::Black);
     pGui->addBanner(instructionsBanner);
 
+    Banner handWinnings("", pGui->getFont(), COL/2, 50, sf::Color::Black);
+    pGui->addBanner(handWinnings);
+
     // BUTTONS
     Button discard1(BTN_WIDTH, BTN_HEIGHT, BTN_ONE_COL, BTN_ROW, sf::Color::Blue, pGui->getFont(), "DISCARD");
     Button discard2(BTN_WIDTH, BTN_HEIGHT, BTN_TWO_COL, BTN_ROW, sf::Color::Blue, pGui->getFont(), "DISCARD");
@@ -165,20 +168,16 @@ int main(void)
 
                 if (event.mouseButton.button == sf::Mouse::Left) {
                     auto mousePos = sf::Mouse::getPosition(pGui->getWindow());
-                    std::cout << mousePos.x << ", " << mousePos.y << std::endl;
-                    // throw std::runtime_error("git here");
                     switch(state)
                     {
                         case GameUtils::SETUP:
                             // ADD COINS
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::ADD_COIN).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                                std::cout << "Add Coin Button!" << std::endl;
                                 pMike->addCoinsToBankRoll(1);
                                 pGui->setBannerText(GameUtils::BannerLoc::BANKROLL, "bankroll: " + std::to_string(pMike->getBankroll()));
                             }
                             // TAKE BET
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::BET1).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                                std::cout << "Bet One!" << std::endl;
                                 int betOut = pMike->declareBet(1);
                                 pDealer->setCurrentBet(betOut);
                                 pGui->setBannerText(GameUtils::BannerLoc::BET,"Bet: " + std::to_string(betOut));
@@ -186,7 +185,6 @@ int main(void)
                                 state = GameUtils::GameState::DEAL;
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::BET2).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                                std::cout << "Bet Two!" << std::endl;
                                 int betOut = pMike->declareBet(2);
                                 pDealer->setCurrentBet(betOut);
                                 pGui->setBannerText(GameUtils::BannerLoc::BET,"Bet: " + std::to_string(betOut));
@@ -194,7 +192,6 @@ int main(void)
                                 state = GameUtils::GameState::DEAL;
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::BET3).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                                std::cout << "Bet Three!" << std::endl;
                                 int betOut = pMike->declareBet(3);
                                 pDealer->setCurrentBet(betOut);
                                 pGui->setBannerText(GameUtils::BannerLoc::BET,"Bet: " + std::to_string(betOut));
@@ -210,7 +207,6 @@ int main(void)
                                 state = GameUtils::GameState::DEAL;
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::BET5).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                                std::cout << "Bet Five!" << std::endl;
                                 int betOut = pMike->declareBet(5);
                                 pDealer->setCurrentBet(betOut);
                                 pGui->setBannerText(GameUtils::BannerLoc::BET,"Bet: " + std::to_string(betOut));
@@ -218,7 +214,6 @@ int main(void)
                                 state = GameUtils::GameState::DEAL;
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::CASHOUT).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                                std::cout << "Cash Out!" << std::endl;
                                 pGui->setBannerText(GameUtils::BannerLoc::INSTRUCTIONS, "CASHED OUT WITH " + std::to_string(pMike->getBankroll()));
                                 state = GameUtils::GameState::DONE;
                             }
@@ -268,8 +263,6 @@ int main(void)
                                         pDealer->receiveDiscard(1);
                                     }
                                 }
-                                
-                                std::cout << "Discarded " << pDealer->getNumCardsPlayerDiscard() << " cards." << std::endl;
                                 for (int j{0}; j < pDealer->getNumCardsPlayerDiscard(); ++j)
                                 {
                                     const Card tempCard = pDealer->dealCard();
@@ -284,7 +277,9 @@ int main(void)
                                 pGui->setCard(GameUtils::CardLoc::FIVE, DeckUtils::cardToFilename(playerHand[4]));
 
                                 int winnings = pDealer->judgeHand(playerHand);
-                                std::cout << "You won "<< winnings << " coins." << std::endl;
+                                if (winnings > pMike->getBet())
+                                    pGui->setBannerText(GameUtils::BannerLoc::WINNINGS, "You won " + std::to_string(winnings - pMike->getBet()) + " coins!");
+
                                 if (winnings > 3) pMike->emote();
 
                                 // Pay out according to judgement
@@ -304,11 +299,18 @@ int main(void)
                                 
                                 state = GameUtils::GameState::SETUP;
 
+                                if (pMike->getBankroll() <= 0)
+                                {
+                                    pGui->setBannerText(GameUtils::BannerLoc::WINNINGS, "Game over you have 0 coins!");
+                                    state = GameUtils::GameState::DONE;
+                                    break;
+                                }
+
                             }
                             break;
 
                         default:
-                            throw std::logic_error("Switch statement error");
+                            throw std::logic_error("Game Over. You lose.");
                             break;
 
                     }

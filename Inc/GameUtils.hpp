@@ -35,7 +35,8 @@ enum BannerLoc
     TITLE = 0,
     BANKROLL,
     BET,
-    INSTRUCTIONS
+    INSTRUCTIONS,
+    WINNINGS
 
 };
 

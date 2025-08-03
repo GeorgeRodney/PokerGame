@@ -22,6 +22,7 @@ class Player : public Person
         void addCoinsToBankRoll(const int coins);
         int declareBet(const int bet);
         void setHand(std::vector<Card>& hand);
+        int getBet(void) const { return currentBet_; }
 
         // 
         void lookAtHand(void) const;
