@@ -15,6 +15,7 @@ class Gui
         std::vector<CardSprite> cards_;
         sf::Event event_;
         sf::RenderWindow window_;
+        std::vector<bool> btnToggled_;
 
 
     public:
@@ -32,6 +33,7 @@ class Gui
         const bool isWindowOpen(void) const { return window_.isOpen(); }
         bool pollEvent(sf::Event& event) { return window_.pollEvent(event); }
         const sf::RenderWindow& getWindow(void) { return window_; }
+        const bool getToggledState(const GameUtils::ButtonLoc btn) const { return btnToggled_[btn]; }
     
         bool pollEvent(void);   
         void closeWindow(void);
@@ -45,9 +47,12 @@ class Gui
         void addCard(CardSprite c);
 
         void setButtonColor(const GameUtils::ButtonLoc btn, const sf::Color c);
+        sf::Color getButtonColor(const GameUtils::ButtonLoc btn);
+        void toggleButton(const GameUtils::ButtonLoc btn);
         void setBannerText(const GameUtils::BannerLoc ban, const std::string& str);
         void setCard(const GameUtils::CardLoc card, const std::string& imgFile);
 
         void drawBanner(sf::RenderWindow* window, GameUtils::BannerLoc ban);
+        void resetToggle(void);
 
 };

@@ -17,6 +17,7 @@ Gui::Gui(const sf::VideoMode& mode
 , font_()
 , cards_()
 , window_(mode, gameName)
+, btnToggled_()
 {
     if(!font_.loadFromFile(fontFile))
     {
@@ -91,6 +92,7 @@ void Gui::addBanner(Banner b)
 void Gui::addButton(Button btn)
 {
     buttons_.push_back(btn);
+    btnToggled_.push_back(false);
 }
 
 void Gui::addCard(CardSprite c)
@@ -103,6 +105,25 @@ void Gui::setButtonColor(const GameUtils::ButtonLoc btn,  sf::Color c)
     buttons_[btn].setFillColor(c);
 }
 
+sf::Color Gui::getButtonColor(const GameUtils::ButtonLoc btn)
+{
+    return buttons_[btn].getColor();
+}
+
+void Gui::toggleButton(const GameUtils::ButtonLoc btn)
+{
+    if (btnToggled_[btn] == false)
+    {
+        buttons_[btn].setFillColor(sf::Color::Red);
+        btnToggled_[btn] = true;
+    }
+    else if (btnToggled_[btn] == true)
+    {
+        buttons_[btn].setFillColor(sf::Color::Blue);
+        btnToggled_[btn] = false;
+    }
+}
+
 void Gui::setBannerText(const GameUtils::BannerLoc ban, const std::string& str)
 {
     banners_[ban].setText(str);
@@ -111,4 +132,9 @@ void Gui::setBannerText(const GameUtils::BannerLoc ban, const std::string& str)
 void Gui::setCard(const GameUtils::CardLoc card, const std::string& imgFile)
 {
     cards_[card].loadCardImage(imgFile);
+}
+
+void Gui::resetToggle(void)
+{
+    std::fill(btnToggled_.begin(), btnToggled_.end(), false);
 }

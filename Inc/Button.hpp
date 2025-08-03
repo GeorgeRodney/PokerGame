@@ -26,4 +26,5 @@ class Button
         const sf::Text& getText(void) const { return text_; }
 
         void setFillColor(const sf::Color& c);
+        sf::Color getColor(void) const { return square_.getFillColor(); }
 };  

@@ -69,7 +69,7 @@ int main(void)
     Banner currentBetBanner("Bet: " + std::to_string(0), pGui->getFont(), BTN_TWO_COL, OPTION_OUT_ROW, sf::Color::Black);
     pGui->addBanner(currentBetBanner);
 
-    Banner instructionsBanner(ADD_COINS_BET_INSTR, pGui->getFont(), ROW/2, INSTRUCTION_ROW, sf::Color::Black);
+    Banner instructionsBanner(ADD_COINS_BET_INSTR, pGui->getFont(), COL/2, INSTRUCTION_ROW, sf::Color::Black);
     pGui->addBanner(instructionsBanner);
 
     // BUTTONS
@@ -236,33 +236,31 @@ int main(void)
                         case GameUtils::DISCARD:
 
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::DISCARD1).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                                pGui->setButtonColor(GameUtils::ButtonLoc::DISCARD1, sf::Color::Red);
-                                pMike->discard(0);
-                                pDealer->receiveDiscard(1);
+                                pGui->toggleButton(GameUtils::ButtonLoc::DISCARD1);
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::DISCARD2).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                                pGui->setButtonColor(GameUtils::ButtonLoc::DISCARD2, sf::Color::Red);
-                                pMike->discard(1);
-                                pDealer->receiveDiscard(1);
+                                pGui->toggleButton(GameUtils::ButtonLoc::DISCARD2);
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::DISCARD3).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                                pGui->setButtonColor(GameUtils::ButtonLoc::DISCARD3, sf::Color::Red);
-                                pMike->discard(2);
-                                pDealer->receiveDiscard(1);
+                                pGui->toggleButton(GameUtils::ButtonLoc::DISCARD3);
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::DISCARD4).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                                pGui->setButtonColor(GameUtils::ButtonLoc::DISCARD4, sf::Color::Red);
-                                pMike->discard(3);
-                                pDealer->receiveDiscard(1);
+                                pGui->toggleButton(GameUtils::ButtonLoc::DISCARD4);
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::DISCARD5).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                                pGui->setButtonColor(GameUtils::ButtonLoc::DISCARD5, sf::Color::Red);
-                                pMike->discard(4);
-                                pDealer->receiveDiscard(1);
+                                pGui->toggleButton(GameUtils::ButtonLoc::DISCARD5);
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::HIT_ME).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
-                                // Get New Cards
-                                pGui->setButtonColor(GameUtils::ButtonLoc::HIT_ME, sf::Color::Green);
+                                // Check for discards
+                                for (int j = 4; j >= 0; --j)
+                                {
+                                    if (pGui->getToggledState(static_cast<GameUtils::ButtonLoc>(j)) == true)
+                                    {
+                                        pMike->discard(j);
+                                        pDealer->receiveDiscard(1);
+                                    }
+                                }
+                                
                                 std::cout << "Discarded " << pDealer->getNumCardsPlayerDiscard() << " cards." << std::endl;
                                 for (int j{0}; j < pDealer->getNumCardsPlayerDiscard(); ++j)
                                 {
@@ -279,6 +277,7 @@ int main(void)
 
                                 int winnings = pDealer->judgeHand(playerHand);
                                 std::cout << "You won "<< winnings << " coins." << std::endl;
+                                if (winnings > 3) pMike->emote();
 
                                 // Pay out according to judgement
                                 pMike->addCoinsToBankRoll(winnings);
@@ -293,6 +292,7 @@ int main(void)
                                 pGui->setBannerText(GameUtils::BannerLoc::BANKROLL, "bankroll: " + std::to_string(pMike->getBankroll()));
                                 pGui->setBannerText(GameUtils::BannerLoc::BET, "Bet: " + std::to_string(0));
                                 pDealer->resetGame();
+                                pGui->resetToggle();
                                 
                                 state = GameUtils::GameState::SETUP;
 
@@ -310,52 +310,6 @@ int main(void)
 
         pGui->clearWindow();
         pGui->drawScreen(firstGo);
-        // window.draw(title);
-        // // Draw discard (Layer TWO
-        // window.draw(btnOneText);
-        // window.draw(btnTwo);
-        // window.draw(btnTwoText);
-        // window.draw(btnThree);
-        // window.draw(btnThreeText);
-        // window.draw(btnFour);
-        // window.draw(btnFourText);
-        // window.draw(btnFive);
-        // window.draw(btnFiveText);
-
-        // Draw cards (Layer ONE)
-        // window.draw(oneSprite);
-        // window.draw(twoSprite);
-        // window.draw(threeSprite);
-        // window.draw(fourSprite);
-        // window.draw(fiveSprite);
-
-        // // Draw options (Layer THREE)
-        // window.draw(addCoinBtn);
-        // window.draw(coinText);
-        // window.draw(currentBetDisplay);
-        // window.draw(dealBtn);
-        // window.draw(delBtnText);
-        // window.draw(dealNewCardsBtn);
-        // window.draw(dealNewCardsText);
-
-        // // Draw Layer FOUR
-        // window.draw(addCoinDisplay);
-
-        // // Draw Layer FIVE
-        // window.draw(instructions);
-
-        // // Draw Bet button
-        // window.draw(bet1Btn);
-        // window.draw(bet1Text);
-        // window.draw(bet2Btn);
-        // window.draw(bet2Text);
-        // window.draw(bet3Btn);
-        // window.draw(bet3Text);
-        // window.draw(bet4Btn);
-        // window.draw(bet4Text);
-        // window.draw(bet5Btn);
-        // window.draw(bet5Text);
-
         pGui->display();
     }
 
