@@ -130,6 +130,7 @@ int main(void)
     //                  My plan is to OOPify the GUI after getting it working. In the same way that I got
     //                  the poker game woring in terminal first. Baby steps.
     //
+    //
     //>---------------------------------------------------------------------------------------------------<
     // Start Game Loop
     //>---------------------------------------------------------------------------------------------------<
@@ -139,6 +140,15 @@ int main(void)
     //              : Game loop by chatGPT. Fleshed out with my structures. 
     //
     //>---------------------------------------------------------------------------------------------------<
+
+
+    //>-----------------------------------THOUGHTS--------------------------------------------------------<
+    //              :   I have OOPified the GUI. I created Button, Banner, and Card objects. 
+    //                  If I was going to take this project further I would:
+    //                      1. Create a GameEngine object.
+    //                      2. Robustness test the actual game. 
+    //>---------------------------------------------------------------------------------------------------<
+
     pGui->debugButtons();
     while (pGui->isWindowOpen())
     {
