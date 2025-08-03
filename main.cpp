@@ -301,7 +301,7 @@ int main(void)
 
                                 if (pMike->getBankroll() <= 0)
                                 {
-                                    pGui->setBannerText(GameUtils::BannerLoc::WINNINGS, "Game over you have 0 coins!");
+                                    pGui->setBannerText(GameUtils::BannerLoc::WINNINGS, "Game Over!");
                                     state = GameUtils::GameState::DONE;
                                     break;
                                 }
