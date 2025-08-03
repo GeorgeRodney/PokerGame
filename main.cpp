@@ -106,6 +106,9 @@ int main(void)
     Button hitMeBtn(BTN_WIDTH, BTN_HEIGHT, BTN_THREE_COL, OPTION_ROW, sf::Color::Blue, pGui->getFont(), "HIT ME");
     pGui->addButton(hitMeBtn);
 
+    Button cashOutBtn(BTN_WIDTH, BTN_HEIGHT, BTN_FOUR_COL, OPTION_ROW, sf::Color::Blue, pGui->getFont(), "CASH OUT");
+    pGui->addButton(cashOutBtn);
+
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------
     CardSprite card1("../resources/large/card_spades_A.png", BTN_ONE_COL, CARD_ROW);
@@ -213,6 +216,11 @@ int main(void)
                                 pGui->setBannerText(GameUtils::BannerLoc::BET,"Bet: " + std::to_string(betOut));
                                 pGui->setBannerText(GameUtils::BannerLoc::INSTRUCTIONS, DEAL_INSTR);
                                 state = GameUtils::GameState::DEAL;
+                            }
+                            if (pGui->getButtonBound(GameUtils::ButtonLoc::CASHOUT).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
+                                std::cout << "Cash Out!" << std::endl;
+                                pGui->setBannerText(GameUtils::BannerLoc::INSTRUCTIONS, "CASHED OUT WITH " + std::to_string(pMike->getBankroll()));
+                                state = GameUtils::GameState::DONE;
                             }
                             break;
                         

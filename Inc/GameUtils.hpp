@@ -8,7 +8,8 @@ enum GameState
     SETUP = 0,
     BET_STATE,
     DEAL,
-    DISCARD
+    DISCARD,
+    DONE
 };
 
 enum ButtonLoc
@@ -25,7 +26,8 @@ enum ButtonLoc
     BET5,
     ADD_COIN,
     DEAL_BTN,
-    HIT_ME
+    HIT_ME,
+    CASHOUT
 };
 
 enum BannerLoc
