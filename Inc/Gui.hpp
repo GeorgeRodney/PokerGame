@@ -28,12 +28,16 @@ class Gui
         const sf::RectangleShape& getButtonBound(const GameUtils::ButtonLoc btn) const { return buttons_[btn].getRect(); }
         int getButtonSize(void) const { return buttons_.size(); }
         const sf::Text& getBanner(const GameUtils::BannerLoc ban) const { return banners_[ban].getHandle(); }
-
-        bool pollEvent(void);
+        const bool isWindowOpen(void) const { return window_.isOpen(); }
+        bool pollEvent(sf::Event& event) { return window_.pollEvent(event); }
+        const sf::RenderWindow& getWindow(void) { return window_; }
+    
+        bool pollEvent(void);   
         void closeWindow(void);
         void clearWindow(void);
         void drawScreen(void);
         void display(void);
+        void debugButtons(void);
 
         void addBanner(Banner b);
         void addButton(Button btn);

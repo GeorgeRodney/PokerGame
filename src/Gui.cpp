@@ -1,4 +1,5 @@
 #include "Gui.hpp"
+#include <iostream>
 
 Gui::Gui()
 {
@@ -50,6 +51,22 @@ void Gui::drawScreen(void)
     for (int j = 0; j < banners_.size(); ++j)
     {
         window_.draw(banners_[j].getHandle());
+    }
+}
+
+void Gui::debugButtons(void)
+{
+    for (int j = 0; j < buttons_.size(); ++j)
+    {
+        const sf::RectangleShape& r = buttons_[j].getRect();
+        std::cout << "Button " << j
+              << " Pos: (" << r.getPosition().x << "," << r.getPosition().y << ") "
+              << "Size: (" << r.getSize().x << "," << r.getSize().y << ") "
+              << "Color: (" << (int)r.getFillColor().r << ","
+                           << (int)r.getFillColor().g << ","
+                           << (int)r.getFillColor().b << ","
+                           << (int)r.getFillColor().a << ")"
+              << std::endl;
     }
 }
 

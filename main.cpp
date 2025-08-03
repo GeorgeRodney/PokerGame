@@ -90,10 +90,10 @@ int main(void)
     Button bet4Btn(BET_WIDTH, BET_HEIGHT, BET_COL, 400, sf::Color::Blue, pGui->getFont(), "BET4");
     Button bet5Btn(BET_WIDTH, BET_HEIGHT, BET_COL, 500, sf::Color::Blue, pGui->getFont(), "BET5");
     pGui->addButton(bet1Btn);
-    pGui->addButton(bet1Btn);
-    pGui->addButton(bet1Btn);
-    pGui->addButton(bet1Btn);
-    pGui->addButton(bet1Btn);
+    pGui->addButton(bet2Btn);
+    pGui->addButton(bet3Btn);
+    pGui->addButton(bet4Btn);
+    pGui->addButton(bet5Btn);
     // std::cout << "Button_ size: " << pGui->getButtonSize() << std::endl;
 
     Button addCoinBtn(BTN_WIDTH, BTN_HEIGHT, BTN_ONE_COL, OPTION_ROW, sf::Color::Blue, pGui->getFont(), "Add Coin+");
@@ -154,20 +154,21 @@ int main(void)
     //              : Game loop by chatGPT. Fleshed out with my structures. 
     //
     //>---------------------------------------------------------------------------------------------------<
-    while (window.isOpen())
+    pGui->debugButtons();
+    while (pGui->isWindowOpen())
     {
         sf::Event event;
-        while (window.pollEvent(event)) {
-
+        while (pGui->pollEvent(event)) 
+        {
             if (event.type == sf::Event::Closed)
-                window.close();
+                pGui->closeWindow();
 
             if (event.type == sf::Event::MouseButtonPressed) {
 
-                if (pGui->getEvent().mouseButton.button == sf::Mouse::Left) {
-                    // Check if mouse clicked inside button
-                    auto mousePos = sf::Mouse::getPosition(window);
-
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    auto mousePos = sf::Mouse::getPosition(pGui->getWindow());
+                    std::cout << mousePos.x << ", " << mousePos.y << std::endl;
+                    // throw std::runtime_error("git here");
                     switch(state)
                     {
                         case GameUtils::SETUP:
@@ -175,7 +176,7 @@ int main(void)
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::ADD_COIN).getLocalBounds().contains(mousePos.x, mousePos.y)) {
                                 std::cout << "Add Coin Button!" << std::endl;
                                 pMike->addCoinsToBankRoll(1);
-                                // addCoinDisplay.setString("bankroll: " + std::to_string(pMike->getBankroll()));
+                                pGui->setBannerText(GameUtils::BannerLoc::BANKROLL, "bankroll: " + std::to_string(pMike->getBankroll()));
                             }
                             // TAKE BET
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::BET1).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
@@ -310,14 +311,10 @@ int main(void)
             }
         }
 
-        // pGui->clearWindow();
-        // pGui->drawScreen();
+        pGui->clearWindow();
+        pGui->drawScreen();
         // window.draw(title);
-        // // Draw discard (Layer TWO)
-        window.clear();
-        // window.draw(pGui->getBanner(GameUtils::BannerLoc::TITLE));
-        sf::Text t = pGui->getBanner(GameUtils::BannerLoc::TITLE);
-        window.draw(t);
+        // // Draw discard (Layer TWO
         // window.draw(btnOneText);
         // window.draw(btnTwo);
         // window.draw(btnTwoText);
@@ -362,98 +359,8 @@ int main(void)
         // window.draw(bet5Btn);
         // window.draw(bet5Text);
 
-        window.display();
+        pGui->display();
     }
-
-    // /// TERMINAL BASED GAME
-    // std::unique_ptr<Player> pMike = std::make_unique<Player>("Mike", 35, "By the sword reforged! Anduril, Flame of the West!");
-    // std::unique_ptr<Dealer> pDealer = std::make_unique<Dealer>("Dale", 58, "Pity....stays the blade.");
-    // // pMike->emote();
-    // Deck deck;
-    // deck.initialize();
-
-    // // Give the deck to the dealer
-    // pDealer->setDeck(deck);
-
-    // // Set the player at the dealers table. 
-    // pDealer->setDealingTo(pMike->getName());
-
-    // // Add initial coin to bankroll
-    // pMike->addCoinsToBankRoll(10);
-
-    // pDealer->deckSize();
-
-    // while (pMike->getBankroll() > 0)
-    // {
-    //     // Declare bet
-    //     int bet;
-    //     std::cout << "You have have a bankroll of " << pMike->getBankroll() << " coins." << std::endl;
-    //     std::cout << "How much would you like to bet?" << std::endl;
-    //     std::cin >> bet;
-    //     int betOut = pMike->declareBet(bet);
-    //     pDealer->setCurrentBet(betOut);
-
-    //     // Deal hand to player
-    //     std::vector<Card> hand = pDealer->dealHand();
-    //     pMike->getHand(hand);
-    //     // pDealer->deckSize();
-
-    //     // Look at player and decide which cards to discard
-    //     int nDiscarded = pMike->discardXcards();
-    //     std::cout << "Discarded " << nDiscarded << " cards." << std::endl;
-        
-    //     // Dealer deals player that many cards
-    //     for (int j{0}; j < nDiscarded; ++j)
-    //     {
-    //         const Card tempCard = pDealer->dealCard();
-    //         pDealer->deckSize();
-    //         pMike->receiveCard(tempCard);
-    //     }
-
-    //     pMike->lookAtHand();
-
-    //     // Show hand to dealer for judgement
-    //     std::vector<Card> playerHand = pMike->showCardsToDealer();
-
-    //     // // Test hand
-    //     // DeckUtils::ID id[5];
-    //     // id[0].suit = DeckUtils::HEART;
-    //     // id[1].suit = DeckUtils::DIAMOND;
-    //     // id[2].suit = DeckUtils::CLUB;
-    //     // id[3].suit = DeckUtils::SPADE;
-    //     // id[4].suit = DeckUtils::HEART;
-
-    //     // id[0].val = DeckUtils::SEVEN;
-    //     // id[1].val = DeckUtils::JACK;
-    //     // id[2].val = DeckUtils::THREE;
-    //     // id[3].val = DeckUtils::JACK;
-    //     // id[4].val = DeckUtils::FIVE;
-    //     // for (int card{0}; card < 5; ++card)
-    //     // {
-    //     //     playerHand[card].setCardId(id[card]);
-    //     // }
-
-
-    //     int winnings = pDealer->judgeHand(playerHand);
-
-    //     std::cout << "You won "<< winnings << " coins." << std::endl;
-
-    //     // Pay out according to judgement
-    //     pMike->addCoinsToBankRoll(winnings);
-
-    //     // Reset
-
-    // }
-
-    // std::cout << "Thank you for your money." << std::endl;
-
-
-
-
-
-
-
-
 
     return 0;
 }

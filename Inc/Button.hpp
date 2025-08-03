@@ -4,8 +4,8 @@
 class Button
 {
     private:
-        sf::RectangleShape square_{};
-        sf::Text text_{};
+        sf::RectangleShape square_;
+        sf::Text text_;
 
         const int BTN_OUTLINE = 5;
         const int TEXT_THICK = 30;
@@ -18,7 +18,7 @@ class Button
                 , const int col
                 , const int row
                 , const sf::Color recColor
-                , const sf::Font font
+                , const sf::Font& font
                 , const std::string& text
                 );
 
