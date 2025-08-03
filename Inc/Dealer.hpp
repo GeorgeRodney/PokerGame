@@ -22,6 +22,7 @@ class Dealer : public Person
         Dealer(std::string name, int age, std::string catchPhrase);
         int judgeHand(const std::vector<Card> hand);
         void shuffleDeck(void);
+        void resetGame(void);
 
         // Setters
         void setDealingTo(const std::string player);

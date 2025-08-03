@@ -4,6 +4,7 @@
 #include "Button.hpp"
 #include "Banner.hpp"
 #include "GameUtils.hpp"
+#include "CardSprite.hpp"
 
 class Gui 
 {
@@ -11,7 +12,7 @@ class Gui
         std::vector<Button> buttons_;
         std::vector<Banner> banners_;
         sf::Font font_; 
-        // std::vector<CardSprite> card_;
+        std::vector<CardSprite> cards_;
         sf::Event event_;
         sf::RenderWindow window_;
 
@@ -35,15 +36,17 @@ class Gui
         bool pollEvent(void);   
         void closeWindow(void);
         void clearWindow(void);
-        void drawScreen(void);
+        void drawScreen(const bool firstGo);
         void display(void);
         void debugButtons(void);
 
         void addBanner(Banner b);
         void addButton(Button btn);
+        void addCard(CardSprite c);
 
         void setButtonColor(const GameUtils::ButtonLoc btn, const sf::Color c);
         void setBannerText(const GameUtils::BannerLoc ban, const std::string& str);
+        void setCard(const GameUtils::CardLoc card, const std::string& imgFile);
 
         void drawBanner(sf::RenderWindow* window, GameUtils::BannerLoc ban);
 

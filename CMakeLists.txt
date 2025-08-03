@@ -17,6 +17,7 @@ set( SOURCES
         ${CMAKE_SOURCE_DIR}/src/Gui.cpp
         ${CMAKE_SOURCE_DIR}/src/Button.cpp
         ${CMAKE_SOURCE_DIR}/src/Banner.cpp
+        ${CMAKE_SOURCE_DIR}/src/CardSprite.cpp
      )
 
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)

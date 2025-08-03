@@ -37,4 +37,13 @@ enum BannerLoc
 
 };
 
+enum CardLoc
+{
+    ONE = 0,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE
+};
+
 }

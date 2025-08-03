@@ -104,36 +104,21 @@ int main(void)
     pGui->addButton(dealBtn);
 
     Button hitMeBtn(BTN_WIDTH, BTN_HEIGHT, BTN_THREE_COL, OPTION_ROW, sf::Color::Blue, pGui->getFont(), "HIT ME");
-    pGui->addButton(dealBtn);
-    // std::cout << "Button_ size: " << pGui->getButtonSize() << std::endl;
+    pGui->addButton(hitMeBtn);
 
 
     //--------------------------------------------------------------------------------------------------------------------------------------------------
-    // Card 1
-    sf::Texture cardOne;
-    cardOne.loadFromFile("../resources/large/card_spades_A.png");
-    sf::Sprite oneSprite(cardOne);
-    oneSprite.setPosition(BTN_ONE_COL-oneSprite.getLocalBounds().getSize().x/2, CARD_ROW);
-    // Card 2
-    sf::Texture cardTwo;
-    cardTwo.loadFromFile("../resources/large/card_spades_K.png");
-    sf::Sprite twoSprite(cardTwo);
-    twoSprite.setPosition(BTN_TWO_COL-twoSprite.getLocalBounds().getSize().x/2, CARD_ROW);
-    // Card 3
-    sf::Texture cardThree;
-    cardThree.loadFromFile("../resources/large/card_spades_Q.png");
-    sf::Sprite threeSprite(cardThree);
-    threeSprite.setPosition(BTN_THREE_COL-threeSprite.getLocalBounds().getSize().x/2, CARD_ROW);
-    // Card 4
-    sf::Texture cardFour;
-    cardFour.loadFromFile("../resources/large/card_spades_J.png");
-    sf::Sprite fourSprite(cardFour);
-    fourSprite.setPosition(BTN_FOUR_COL-fourSprite.getLocalBounds().getSize().x/2, CARD_ROW);
-    // Card 5
-    sf::Texture cardFive;
-    cardFive.loadFromFile("../resources/large/card_spades_10.png");
-    sf::Sprite fiveSprite(cardFive);
-    fiveSprite.setPosition(BTN_FIVE_COL-fiveSprite.getLocalBounds().getSize().x/2, CARD_ROW);
+    CardSprite card1("../resources/large/card_spades_A.png", BTN_ONE_COL, CARD_ROW);
+    CardSprite card2("../resources/large/card_spades_K.png", BTN_TWO_COL, CARD_ROW);
+    CardSprite card3("../resources/large/card_spades_Q.png", BTN_THREE_COL, CARD_ROW);
+    CardSprite card4("../resources/large/card_spades_J.png", BTN_FOUR_COL, CARD_ROW);
+    CardSprite card5("../resources/large/card_spades_10.png", BTN_FIVE_COL, CARD_ROW);
+    pGui->addCard(card1);
+    pGui->addCard(card2);
+    pGui->addCard(card3);
+    pGui->addCard(card4);
+    pGui->addCard(card5);
+    bool firstGo(true);
 
     //>---------------------------------------------------------------------------------------------------<
     //  Citation    :   ChatGPT, July 27 2025
@@ -173,7 +158,7 @@ int main(void)
                     {
                         case GameUtils::SETUP:
                             // ADD COINS
-                            if (pGui->getButtonBound(GameUtils::ButtonLoc::ADD_COIN).getLocalBounds().contains(mousePos.x, mousePos.y)) {
+                            if (pGui->getButtonBound(GameUtils::ButtonLoc::ADD_COIN).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
                                 std::cout << "Add Coin Button!" << std::endl;
                                 pMike->addCoinsToBankRoll(1);
                                 pGui->setBannerText(GameUtils::BannerLoc::BANKROLL, "bankroll: " + std::to_string(pMike->getBankroll()));
@@ -183,40 +168,40 @@ int main(void)
                                 std::cout << "Bet One!" << std::endl;
                                 int betOut = pMike->declareBet(1);
                                 pDealer->setCurrentBet(betOut);
-                                // currentBetDisplay.setString("Bet: " + std::to_string(betOut));
-                                // instructions.setString(DEAL_INSTR);
+                                pGui->setBannerText(GameUtils::BannerLoc::BET,"Bet: " + std::to_string(betOut));
+                                pGui->setBannerText(GameUtils::BannerLoc::INSTRUCTIONS, DEAL_INSTR);
                                 state = GameUtils::GameState::DEAL;
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::BET2).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
                                 std::cout << "Bet Two!" << std::endl;
                                 int betOut = pMike->declareBet(2);
                                 pDealer->setCurrentBet(betOut);
-                                // currentBetDisplay.setString("Bet: " + std::to_string(betOut));
-                                // instructions.setString(DEAL_INSTR);
+                                pGui->setBannerText(GameUtils::BannerLoc::BET,"Bet: " + std::to_string(betOut));
+                                pGui->setBannerText(GameUtils::BannerLoc::INSTRUCTIONS, DEAL_INSTR);
                                 state = GameUtils::GameState::DEAL;
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::BET3).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
                                 std::cout << "Bet Three!" << std::endl;
                                 int betOut = pMike->declareBet(3);
                                 pDealer->setCurrentBet(betOut);
-                                // currentBetDisplay.setString("Bet: " + std::to_string(betOut));
-                                // instructions.setString(DEAL_INSTR);
+                                pGui->setBannerText(GameUtils::BannerLoc::BET,"Bet: " + std::to_string(betOut));
+                                pGui->setBannerText(GameUtils::BannerLoc::INSTRUCTIONS, DEAL_INSTR);
                                 state = GameUtils::GameState::DEAL;
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::BET4).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
                                 std::cout << "Bet Four!" << std::endl;
                                 int betOut = pMike->declareBet(4);
                                 pDealer->setCurrentBet(betOut);
-                                // currentBetDisplay.setString("Bet: " + std::to_string(betOut));
-                                // instructions.setString(DEAL_INSTR);
+                                pGui->setBannerText(GameUtils::BannerLoc::BET,"Bet: " + std::to_string(betOut));
+                                pGui->setBannerText(GameUtils::BannerLoc::INSTRUCTIONS, DEAL_INSTR);
                                 state = GameUtils::GameState::DEAL;
                             }
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::BET5).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
                                 std::cout << "Bet Five!" << std::endl;
                                 int betOut = pMike->declareBet(5);
                                 pDealer->setCurrentBet(betOut);
-                                // currentBetDisplay.setString("Bet: " + std::to_string(betOut));
-                                // instructions.setString(DEAL_INSTR);
+                                pGui->setBannerText(GameUtils::BannerLoc::BET,"Bet: " + std::to_string(betOut));
+                                pGui->setBannerText(GameUtils::BannerLoc::INSTRUCTIONS, DEAL_INSTR);
                                 state = GameUtils::GameState::DEAL;
                             }
                             break;
@@ -227,16 +212,16 @@ int main(void)
                                 std::vector<Card> hand = pDealer->dealHand();
                                 pMike->setHand(hand);
                                 // Display current player hand
-                                cardOne.loadFromFile(DeckUtils::cardToFilename(hand[0]));
-                                cardTwo.loadFromFile(DeckUtils::cardToFilename(hand[1]));
-                                cardThree.loadFromFile(DeckUtils::cardToFilename(hand[2]));
-                                cardFour.loadFromFile(DeckUtils::cardToFilename(hand[3]));
-                                cardFive.loadFromFile(DeckUtils::cardToFilename(hand[4]));
-                                // instructions.setString(DISCARD_INSTR);
+                                pGui->setCard(GameUtils::CardLoc::ONE, DeckUtils::cardToFilename(hand[0]));
+                                pGui->setCard(GameUtils::CardLoc::TWO, DeckUtils::cardToFilename(hand[1]));
+                                pGui->setCard(GameUtils::CardLoc::THREE, DeckUtils::cardToFilename(hand[2]));
+                                pGui->setCard(GameUtils::CardLoc::FOUR, DeckUtils::cardToFilename(hand[3]));
+                                pGui->setCard(GameUtils::CardLoc::FIVE, DeckUtils::cardToFilename(hand[4]));
+                                pGui->setBannerText(GameUtils::BannerLoc::INSTRUCTIONS, DISCARD_INSTR);
+                                if (firstGo) firstGo = false;
                                 state = GameUtils::DISCARD;
                             }
                             break;
-                            // STOPPED HERE. CREATE SWITCH STATEMENT FOR GAME STATE OPTIONS
 
                         case GameUtils::DISCARD:
 
@@ -268,6 +253,7 @@ int main(void)
                             if (pGui->getButtonBound(GameUtils::ButtonLoc::HIT_ME).getGlobalBounds().contains(mousePos.x, mousePos.y)) {
                                 // Get New Cards
                                 pGui->setButtonColor(GameUtils::ButtonLoc::HIT_ME, sf::Color::Green);
+                                std::cout << "Discarded " << pDealer->getNumCardsPlayerDiscard() << " cards." << std::endl;
                                 for (int j{0}; j < pDealer->getNumCardsPlayerDiscard(); ++j)
                                 {
                                     const Card tempCard = pDealer->dealCard();
@@ -275,11 +261,11 @@ int main(void)
                                 }
                                 // Display current player hand
                                 std::vector<Card> playerHand = pMike->showCardsToDealer();
-                                cardOne.loadFromFile(DeckUtils::cardToFilename(playerHand[0]));
-                                cardTwo.loadFromFile(DeckUtils::cardToFilename(playerHand[1]));
-                                cardThree.loadFromFile(DeckUtils::cardToFilename(playerHand[2]));
-                                cardFour.loadFromFile(DeckUtils::cardToFilename(playerHand[3]));
-                                cardFive.loadFromFile(DeckUtils::cardToFilename(playerHand[4]));
+                                pGui->setCard(GameUtils::CardLoc::ONE, DeckUtils::cardToFilename(playerHand[0]));
+                                pGui->setCard(GameUtils::CardLoc::TWO, DeckUtils::cardToFilename(playerHand[1]));
+                                pGui->setCard(GameUtils::CardLoc::THREE, DeckUtils::cardToFilename(playerHand[2]));
+                                pGui->setCard(GameUtils::CardLoc::FOUR, DeckUtils::cardToFilename(playerHand[3]));
+                                pGui->setCard(GameUtils::CardLoc::FIVE, DeckUtils::cardToFilename(playerHand[4]));
 
                                 int winnings = pDealer->judgeHand(playerHand);
                                 std::cout << "You won "<< winnings << " coins." << std::endl;
@@ -296,6 +282,7 @@ int main(void)
 
                                 pGui->setBannerText(GameUtils::BannerLoc::BANKROLL, "bankroll: " + std::to_string(pMike->getBankroll()));
                                 pGui->setBannerText(GameUtils::BannerLoc::BET, "Bet: " + std::to_string(0));
+                                pDealer->resetGame();
                                 
                                 state = GameUtils::GameState::SETUP;
 
@@ -312,7 +299,7 @@ int main(void)
         }
 
         pGui->clearWindow();
-        pGui->drawScreen();
+        pGui->drawScreen(firstGo);
         // window.draw(title);
         // // Draw discard (Layer TWO
         // window.draw(btnOneText);

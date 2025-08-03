@@ -15,7 +15,7 @@ Gui::Gui(const sf::VideoMode& mode
 : buttons_()
 , banners_()
 , font_()
-// , card_()
+, cards_()
 , window_(mode, gameName)
 {
     if(!font_.loadFromFile(fontFile))
@@ -39,7 +39,7 @@ void Gui::clearWindow(void)
     window_.clear(sf::Color::White);
 }
 
-void Gui::drawScreen(void)
+void Gui::drawScreen(const bool firstGo)
 {
     // Buttons
     for (int j = 0; j < buttons_.size(); ++j)
@@ -51,6 +51,14 @@ void Gui::drawScreen(void)
     for (int j = 0; j < banners_.size(); ++j)
     {
         window_.draw(banners_[j].getHandle());
+    }
+    // Cards
+    if (!firstGo)
+    {
+        for (int j = 0; j < cards_.size(); ++j)
+        {
+            window_.draw(cards_[j].getSprite());
+        }
     }
 }
 
@@ -85,6 +93,11 @@ void Gui::addButton(Button btn)
     buttons_.push_back(btn);
 }
 
+void Gui::addCard(CardSprite c)
+{
+    cards_.push_back(c);
+}
+
 void Gui::setButtonColor(const GameUtils::ButtonLoc btn,  sf::Color c)
 {
     buttons_[btn].setFillColor(c);
@@ -93,4 +106,9 @@ void Gui::setButtonColor(const GameUtils::ButtonLoc btn,  sf::Color c)
 void Gui::setBannerText(const GameUtils::BannerLoc ban, const std::string& str)
 {
     banners_[ban].setText(str);
+}
+
+void Gui::setCard(const GameUtils::CardLoc card, const std::string& imgFile)
+{
+    cards_[card].loadCardImage(imgFile);
 }

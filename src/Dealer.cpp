@@ -98,7 +98,6 @@ void Dealer::setCurrentBet(const int currentBet)
 const std::vector<Card> Dealer::dealHand(void)
 {
     return pDealerDeck_->drawHand();
-    nCardPlayerDicard_ = 0;
 }
 
 const Card Dealer::dealCard(void)
@@ -560,4 +559,11 @@ bool Dealer::isJacksOrBetter(void) const
 void Dealer::receiveDiscard(const int nCards)
 {
     nCardPlayerDicard_++;
+}
+
+void Dealer::resetGame(void)
+{
+    shuffleDeck();
+    nCardPlayerDicard_ = 0;
+    currentBet_ = 0;
 }
